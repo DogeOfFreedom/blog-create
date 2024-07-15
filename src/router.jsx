@@ -6,6 +6,7 @@ import ErrorPage from "./ErrorPage";
 import Redirect from "./Redirect";
 import Posts from "./Posts";
 import Post from "./Post";
+import CreatePost from "./CreatePost";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "posts/create",
+        element: <CreatePost />,
       },
       {
         path: "posts/:id",

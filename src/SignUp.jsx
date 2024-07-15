@@ -14,7 +14,6 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isAuthor, setIsAuthor] = useState(false);
   const [preview, setPreview] = useState();
   const [uploadFile, setUploadFile] = useState();
   const [formError, setFormError] = useState();
@@ -101,7 +100,7 @@ export default function SignUp() {
       username,
       password,
       confirmPassword,
-      isAuthor,
+      isAuthor: true,
       hasProfileImg,
     };
     await fetch(import.meta.env.VITE_HOSTNAME + "/api/sign-up", {
@@ -207,16 +206,6 @@ export default function SignUp() {
             id="confirm_password"
             required
           />
-        </div>
-        <div className="checkboxContainer">
-          <input type="checkbox" name="isAuthor" id="isAuthor" />
-          <label
-            value={isAuthor}
-            onChange={(e) => setIsAuthor(e.target.value)}
-            htmlFor="isAuthor"
-          >
-            Author?
-          </label>
         </div>
         <div className="inputContainer">
           <label htmlFor="profilePicture">Profile Picture</label>

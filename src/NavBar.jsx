@@ -23,9 +23,14 @@ export default function NavBar({ setLoggedIn = () => {}, loggedIn = false }) {
         {path !== "/signup" &&
           path !== "/login" &&
           (loggedIn ? (
-            <button onClick={logOut} className="actionBtn">
-              Log Out
-            </button>
+            <>
+              <a href="/posts/create">
+                <button className="actionBtn">Make New Post</button>
+              </a>
+              <button onClick={logOut} className="actionBtn">
+                Log Out
+              </button>
+            </>
           ) : (
             <a href="/signup">
               <button className="actionBtn">Sign In</button>

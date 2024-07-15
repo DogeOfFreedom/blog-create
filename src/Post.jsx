@@ -123,6 +123,16 @@ export default function Post() {
     setLoading(false);
   };
 
+  const deleteComment = async (commentId) => {
+    await fetch(import.meta.env.VITE_HOSTNAME + "/api/comments/" + commentId, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    // Get list of new comments
+    await fetchComments();
+  };
+
   if (loading) return <LoadingWheel />;
   if (!loggedIn) return <Forbidden />;
   if (error) return <LoadingError />;
@@ -164,7 +174,7 @@ export default function Post() {
       ) : (
         <div className="commentsContainer">
           <h1>Comments</h1>
-          {comments ? (
+          {comments.length > 0 ? (
             comments.map((comment) => (
               <div key={comment._id} className="comment">
                 <div className="userImgContainer">
@@ -178,11 +188,17 @@ export default function Post() {
                   <h3>{comment.author.username}</h3>
                   <p>{comment.content}</p>
                 </div>
+                <button
+                  onClick={() => deleteComment(comment._id)}
+                  className="deleteBtn"
+                >
+                  &#128465;
+                </button>
               </div>
             ))
           ) : (
             <>
-              <h1>No Comments Yet</h1>
+              <h2>No Comments Yet</h2>
             </>
           )}
         </div>
