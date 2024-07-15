@@ -46,7 +46,7 @@ export default function CreatePost() {
     return (
       <>
         <LoadingWheel />
-        <p>Submitting Post, please wait</p>
+        <p className="centreText">Submitting Post, please wait</p>
       </>
     );
   if (error) return <LoadingError />;
