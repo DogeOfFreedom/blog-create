@@ -419,3 +419,22 @@ textarea {
     transform: rotate(360deg);
   }
 }
+
+/* Error Page */
+.errorPageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    margin-bottom: 0px;
+  }
+
+  p {
+    margin-bottom: 30px;
+  }
+}
+
+.centreText {
+  text-align: center;
+}

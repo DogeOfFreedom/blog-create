@@ -131,7 +131,7 @@ export default function SignUp() {
     return (
       <>
         <LoadingWheel />
-        <p>Submitting Form, please wait</p>
+        <p className="centreText">Submitting Form, please wait</p>
       </>
     );
 
