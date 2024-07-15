@@ -13,12 +13,9 @@ export default function Posts() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      await fetch(
-        import.meta.env.VITE_HOSTNAME + "/api/posts?isPublished=true",
-        {
-          credentials: "include",
-        }
-      )
+      await fetch(import.meta.env.VITE_HOSTNAME + "/api/posts", {
+        credentials: "include",
+      })
         .then(async (res) => {
           if (res.status === 403) {
             setLoading(false);
@@ -61,6 +58,9 @@ export default function Posts() {
                 <span className="cardAuthor">{post.author.username}</span>
                 <span className="cardTimeStamp">
                   {convertDate(post.timestamp)}
+                </span>
+                <span className="cardIsPublished">
+                  {post.isPublished ? "Published" : "Not Published"}
                 </span>
               </div>
             </div>

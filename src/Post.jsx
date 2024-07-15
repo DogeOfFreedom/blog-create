@@ -16,44 +16,54 @@ export default function Post() {
   const [userComment, setUserComment] = useState("");
   const { id } = useParams();
 
+  const fetchPost = async () => {
+    const res = await fetch(
+      import.meta.env.VITE_HOSTNAME + "/api/posts/" + id,
+      {
+        credentials: "include",
+      }
+    )
+      .then(async (res) => {
+        if (res.status !== 200) {
+          return navigate("/");
+        }
+        const data = await res.json();
+        setPost(data);
+      })
+      .catch((e) => {
+        setLoading(false);
+        console.log(e);
+        setError(e);
+      });
+    return res;
+  };
+
+  const fetchComments = async () => {
+    const res = await fetch(
+      import.meta.env.VITE_HOSTNAME + "/api/posts/" + id + "/comments",
+      { credentials: "include" }
+    )
+      .then(async (res) => {
+        if (res.status !== 200) {
+          return navigate("/");
+        }
+        const data = await res.json();
+        setComments(data);
+      })
+      .catch((e) => {
+        setLoading(false);
+        console.log(e);
+        setError(e);
+      });
+    return res;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const postData = await fetch(
-        import.meta.env.VITE_HOSTNAME + "/api/posts/" + id,
-        {
-          credentials: "include",
-        }
-      ).catch((e) => {
-        setLoading(false);
-        console.log(e);
-        setError(e);
-      });
-      const commentsData = fetch(
-        import.meta.env.VITE_HOSTNAME + "/api/posts/" + id + "/comments",
-        { credentials: "include" }
-      ).catch((e) => {
-        setLoading(false);
-        console.log(e);
-        setError(e);
-      });
-
-      Promise.all([postData, commentsData])
-        .then(async (promises) => {
-          for (let i = 0; i < promises.length; i++) {
-            if (promises[i].status !== 200) {
-              navigate("/");
-              return;
-            }
-            promises[i] = await promises[i].json();
-          }
-          setPost(promises[0]);
-          setComments(promises[1]);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setError(error);
-        });
+      setLoading(true);
+      await fetchPost();
+      await fetchComments();
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -81,24 +91,36 @@ export default function Post() {
       });
 
     // Get list of new comments
-    await fetch(
-      import.meta.env.VITE_HOSTNAME + "/api/posts/" + id + "/comments",
-      {
-        credentials: "include",
-      }
-    )
-      .then(async (res) => {
+    await fetchComments();
+  };
+
+  const changePublishStatus = async () => {
+    setLoading(true);
+
+    // Change isPublished Status
+    const isPublished = post.isPublished;
+    const newStatus = isPublished ? false : true;
+    const obj = { isPublished: newStatus };
+    await fetch(import.meta.env.VITE_HOSTNAME + "/api/posts/" + id, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    })
+      .then((res) => {
         if (res.status !== 200) {
-          throw new Error("Failed to fetch comments");
+          return navigate("/");
         }
-        const data = await res.json();
-        setComments(data);
-        setCommentsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setError(error);
       });
+
+    await fetchPost();
+    setLoading(false);
   };
 
   if (loading) return <LoadingWheel />;
@@ -114,6 +136,15 @@ export default function Post() {
           <span>{convertDate(post.timestamp)}</span>
         </div>
         <p>{post.text}</p>
+        <div className="publishDetails">
+          <span>
+            Publish Status:{" "}
+            <b>{post.isPublished ? "Published" : "Unpublished"}</b>
+          </span>
+          <button onClick={changePublishStatus} className="actionBtn">
+            {post.isPublished ? "Unpublish Post" : "Publish Post"}
+          </button>
+        </div>
       </div>
       <form className="createCommentForm" onSubmit={handleCommentSubmit}>
         <h1>Make a new comment</h1>

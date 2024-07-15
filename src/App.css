@@ -180,22 +180,36 @@ footer {
   font-size: var(--text)
 }
 
+.cardIsPublished {
+  text-decoration: underline;
+  font-size:var(--text)
+}
+
 /* Post Page */
 .postContainer {
   display: flex;
   flex-direction: column;
 
-  .authorDetails {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 20px;
-    font-size: var(--text);
-  }
-
   p {
     font-size: var(--text);
   }
+}
+
+.authorDetails {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: var(--text);
+}
+
+.publishDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: var(--text);
 }
 
 .createCommentForm { 
